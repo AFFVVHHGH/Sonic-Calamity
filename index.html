@@ -1,209 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonic Calamity</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background-color: #0b0c10;
-            font-family: system-ui, -apple-system, sans-serif;
-            color: #ffffff;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .sidebar {
-            width: 280px;
-            background-color: #12131a;
-            border-right: 1px solid #1f2029;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 1rem;
-            flex-shrink: 0;
-        }
-        .sidebar-header {
-            margin-bottom: 2rem;
-            padding-left: 0.5rem;
-        }
-        .sidebar-header h1 {
-            font-size: 1.3rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #3b82f6;
-            text-transform: uppercase;
-        }
-        .sidebar-header p {
-            font-size: 0.8rem;
-            color: #4b5563;
-            margin-top: 0.2rem;
-        }
-        .animation-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .menu-btn {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: #9ca3af;
-            padding: 0.85rem 1rem;
-            text-align: left;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .menu-btn:hover {
-            background-color: #1c1d26;
-            color: #ffffff;
-        }
-        .menu-btn.active {
-            background-color: #1e293b;
-            border-left: 4px solid #3b82f6;
-            color: #eff6ff;
-        }
-        .theater-container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            background-color: #07080c;
-        }
-        .screen-frame {
-            width: 100%;
-            max-width: 840px;
-            background-color: #12131a;
-            border: 1px solid #1f2029;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-        }
-        .iframe-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 75%;
-            background-color: #000000;
-        }
-        .iframe-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .title-bar {
-            padding: 1.25rem 1.5rem;
-            background-color: #12131a;
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #f3f4f6;
-            border-top: 1px solid #1f2029;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .live-badge {
-            font-size: 0.75rem;
-            background-color: #10b981;
-            color: #ffffff;
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                border-right: none;
-                border-bottom: 1px solid #1f2029;
-            }
-            .animation-list {
-                flex-direction: row;
-                overflow-x: auto;
-                padding-bottom: 0.5rem;
-            }
-            .menu-btn {
-                white-space: nowrap;
-            }
-            .theater-container {
-                padding: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <h1>Sonic Calamity<h1>
-            <p>Select a animation to load</p>
-        </div>
-        <ul class="animation-list">
-            <li>
-                <button class="menu-btn active" data-src="https://scratch.mit.edu/projects/1363020279/embed" data-title="#1 - Project 1">
-                    Project 1
-                </button>
-            </li>
-            <li>
-                <button class="menu-btn" data-src="https://scratch.mit.edu/projects/1363181092/embed" data-title="#2 - Project 2">
-                    Project 2
-                </button>
-            </li>
-            <li>
-                <button class="menu-btn" data-src="https://scratch.mit.edu/projects/1363187806/embed" data-title="Sonic Animation - Project 3">
-                    Project 3
-                </button>
-            </li>
-            <li>
-                <button class="menu-btn" data-src="https://scratch.mit.edu/projects/1363191767/embed" data-title="Sonic Animation - Project 4">
-                    Project 4
-                </button>
-            </li>
-        </ul>
-    </nav>
-
-    <main class="theater-container">
-        <div class="screen-frame">
-            <div class="iframe-wrapper">
-                <iframe id="theaterFrame" src="https://scratch.mit.edu/projects/1363020279/embed" allowfullscreen="true" scrolling="no" allow="cross-origin-isolated"></iframe>
-            </div>
-            <div class="title-bar">
-                <span id="videoTitle">Sonic Animation - Project 1</span>
-                <span class="live-badge">Theater Mode</span>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        const buttons = document.querySelectorAll('.menu-btn');
-        const frame = document.getElementById('theaterFrame');
-        const displayTitle = document.getElementById('videoTitle');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelector('.menu-btn.active').classList.remove('active');
-                button.classList.add('active');
-                
-                frame.src = button.getAttribute('data-src');
-                displayTitle.textContent = button.getAttribute('data-title');
-            });
-        });
-    </script>
-
-</body>
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Sonic Calamity</title> 
+<style> 
+* { box-sizing: border-box; margin: 0; padding: 0; } 
+body { background-color: #0b0c10; font-family: system-ui, -apple-system, sans-serif; color: #ffffff; display: flex; height: 100vh; overflow: hidden; } 
+.sidebar { width: 280px; background-color: #12131a; border-right: 1px solid #1f2029; display: flex; flex-direction: column; padding: 1.5rem 1rem; flex-shrink: 0; } 
+.sidebar-header { margin-bottom: 2rem; padding-left: 0.5rem; } 
+.sidebar-header h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: 0.5px; color: #3b82f6; text-transform: uppercase; } 
+.sidebar-header p { font-size: 0.8rem; color: #4b5563; margin-top: 0.2rem; } 
+.animation-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; } 
+.menu-btn { width: 100%; background: transparent; border: none; color: #9ca3af; padding: 0.85rem 1rem; text-align: left; font-size: 0.95rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; } 
+.menu-btn:hover { background-color: #1c1d26; color: #ffffff; } 
+.menu-btn.active { background-color: #1e293b; border-left: 4px solid #3b82f6; color: #eff6ff; } 
+.theater-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem; background-color: #07080c; overflow-y: auto; } 
+.screen-frame { width: 100%; max-width: 840px; background-color: #12131a; border: 1px solid #1f2029; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); margin-bottom: 1.5rem; } 
+.iframe-wrapper { position: relative; width: 100%; padding-top: 75%; background-color: #000000; } 
+.iframe-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; } 
+.title-bar { padding: 1.25rem 1.5rem; background-color: #12131a; font-size: 1.05rem; font-weight: 600; color: #f3f4f6; border-top: 1px solid #1f2029; display: flex; justify-content: space-between; align-items: center; } 
+.live-badge { font-size: 0.75rem; background-color: #3b82f6; color: #ffffff; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; text-transform: uppercase; } 
+.about-section { width: 100%; max-width: 840px; background-color: #12131a; border: 1px solid #1f2029; border-radius: 12px; padding: 1.5rem; } 
+.about-section h2 { color: #3b82f6; font-size: 1.2rem; margin-bottom: 0.75rem; } 
+.about-section p { color: #9ca3af; line-height: 1.5; font-size: 0.95rem; margin-bottom: 1rem; } 
+.about-section h3 { color: #f3f4f6; font-size: 1rem; margin-bottom: 0.5rem; margin-top: 1rem; } 
+@media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1f2029; } .animation-list { flex-direction: row; overflow-x: auto; padding-bottom: 0.5rem; } .menu-btn { white-space: nowrap; } .theater-container { padding: 1rem; } } 
+</style> 
+</head> 
+<body> 
+<nav class="sidebar"> 
+<div class="sidebar-header"> 
+<h1>Sonic Calamity</h1> 
+<p>Select an animation to load</p> 
+</div> 
+<ul class="animation-list"> 
+<li> <button class="menu-btn active" data-src="https://scratch.mit.edu/projects/1363020279/embed" data-title="Sonic Animation - Project 1"> Project 1 </button> </li> 
+<li> <button class="menu-btn" data-src="https://scratch.mit.edu/projects/1363181092/embed" data-title="Sonic Animation - Project 2"> Project 2 </button> </li> 
+<li> <button class="menu-btn" data-src="https://scratch.mit.edu/projects/1363187806/embed" data-title="Sonic Animation - Project 3"> Project 3 </button> </li> 
+<li> <button class="menu-btn" data-src="https://scratch.mit.edu/projects/1363191767/embed" data-title="Sonic Animation - Project 4"> Project 4 </button> </li> 
+</ul> 
+</nav> 
+<main class="theater-container"> 
+<div class="screen-frame"> 
+<div class="iframe-wrapper"> 
+<iframe id="theaterFrame" src="https://mit.edu" allowfullscreen="true" scrolling="no" allow="cross-origin-isolated"></iframe> 
+</div> 
+<div class="title-bar"> 
+<span id="videoTitle">Sonic Animation - Project 1</span> 
+<span class="live-badge">Theater Mode</span> 
+</div> 
+</div> 
+<section class="about-section"> 
+<h2>About Sonic Calamity</h2> 
+<p>Welcome to my calamity of Sonic 3! This is very different from the original game. Let's see how the table turns!</p> 
+<h3>Episode 1: Knuckles to Hydrocity</h3> 
+<p>Was it annoying when Knuckles dropped the player by dropping the bridge? Well, not anymore! This episode has a lot of twists. It is now the complete opposite.</p> 
+<h3>Episode 2: Knuckles Straight Down Hydrocity</h3> 
+<p>Knuckles drops you in Hydrocity too... You guessed it. You drop Knuckles.</p> 
+</section> 
+</main> 
+<script> 
+const buttons = document.querySelectorAll('.menu-btn'); 
+const frame = document.getElementById('theaterFrame'); 
+const displayTitle = document.getElementById('videoTitle'); 
+buttons.forEach(button => { 
+button.addEventListener('click', () => { 
+document.querySelector('.menu-btn.active').classList.remove('active'); 
+button.classList.add('active'); 
+frame.src = button.getAttribute('data-src'); 
+displayTitle.textContent = button.getAttribute('data-title'); 
+}); 
+}); 
+</script> 
+</body> 
 </html>
